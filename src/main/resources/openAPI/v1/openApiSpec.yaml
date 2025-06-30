@@ -1,0 +1,67 @@
+openapi: "3.0.2"
+info:
+  description: |
+    This API provides an example of how the service will take REST requests from a client.
+  version: "1.0.0"
+  title: "Skeleton Service"
+servers:
+  - url: http://localhost:8080
+paths:
+    /v1/test/{client_id}:
+      get:
+        operationId: "v1TestClientIdGet"
+        tags:
+          - "Test endpoint"
+        summary: "Test endpoint to provide greetings to client"
+        parameters:
+          - in: path
+            description: "Name of the client"
+            example: "John"
+            name: client_id
+            schema:
+              type: string
+              pattern: "^[a-zA-Z][_a-zA-Z0-9]*$"
+            allowReserved: false
+            required: true
+        responses:
+          "200":
+            description: "Greeting messages is properly provided"
+            content:
+              text/plain:
+                schema:
+                  type: string
+                  example: "Hello John"
+          "400":
+            description: "Bad Request. The request is not properly formed."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Problem"
+          "500":
+            description: "Internal Server Error. An unspecified error has occurred in the AAS."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Problem"
+          "503":
+            description: "Service Unavailable. This service is currently unable to handle the request."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Problem"
+             
+components:
+  schemas:
+    Problem:
+      description: Additional information in an error response.
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Method Not Allowed"
+        status:
+          type: integer
+          example: 405
+        detail:
+          type: string
+          example: "This method is not currently supported"
